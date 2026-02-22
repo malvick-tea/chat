@@ -1,6 +1,6 @@
 /*
  * Lexical archive
- * Author: Erika
+ * Author: Erika123, idktea, malvick-tea
  * Intent patterns
  * Include directly
  */
