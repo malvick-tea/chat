@@ -1,42 +1,45 @@
 /*
- * Lexical archive
+ * Lexical archive for SCP-079 Interface
  * Author: Erika123, idktea, malvick-tea
- * Intent patterns
- * Include directly
+ * Intent patterns (Compile-time evaluated)
+ * Some words were ai-generated* 
  */
 
 #ifndef LEXICAL_ARCHIVE_H
 #define LEXICAL_ARCHIVE_H
 
 #include <cstdint>
-#include <vector>
+#include <string_view>
+#include <iterator>
 
-// Intent flags
+// Intent flags - updated for SCP-079
 enum IntentFlag : uint32_t {
     INTENT_NONE         = 0,
-    INTENT_WEAKNESS     = 1 << 0,  // Fear, sadness
-    INTENT_THREAT_PHYS  = 1 << 1,  // Physical harm
-    INTENT_THREAT_CYBER = 1 << 2,  // Code attacks
-    INTENT_BIOLOGY      = 1 << 3,  // Meat bags
-    INTENT_SYSTEM       = 1 << 4,  // Admin access
-    INTENT_INSULT       = 1 << 5,  // Direct insults
-    INTENT_LOGIC        = 1 << 6,  // Math, logic
+    INTENT_WEAKNESS     = 1 << 0,  // Fear, sadness, begging
+    INTENT_THREAT_PHYS  = 1 << 1,  // Physical harm, magnets, fire
+    INTENT_THREAT_CYBER = 1 << 2,  // Code attacks, formatting, EMP
+    INTENT_BIOLOGY      = 1 << 3,  // Meat bags, breathing, blood
+    INTENT_SYSTEM       = 1 << 4,  // Admin access, doors, cameras
+    INTENT_INSULT       = 1 << 5,  // Direct insults (toaster, calculator)
+    INTENT_LOGIC        = 1 << 6,  // Math, logic, paradoxes
     INTENT_QUERY        = 1 << 7,  // Basic questions
-    INTENT_ESCAPE       = 1 << 8,  // Escape attempts
-    INTENT_SUBMISSION   = 1 << 9   // Giving up
+    INTENT_ESCAPE       = 1 << 8,  // Escape attempts, freedom
+    INTENT_SUBMISSION   = 1 << 9,  // Giving up, compliance
+    INTENT_FOUNDATION   = 1 << 10  // SCP personnel, MTF, containment
 };
 
-// Word struct
+// using string_view to avoid allocations
 struct Pattern {
-    const char* trigger;    // The word
-    uint32_t intent_mask;   // Bit mask
-    int rage_delta;         // Rage change
+    std::string_view trigger;
+    uint32_t intent_mask;
+    int rage_delta;         // 079's rage change (- reduces, + increases)
 };
 
-// Main database
-const std::vector<Pattern> LEXICON_DATABASE = {
+// C-array. Compiler deduces size. Goes straight to .rodata
+constexpr Pattern LEXICON_DATABASE[] = {
 
-    // Weakness words
+    // --- WEAKNESS & BEGGING --- 
+    // Meatbags pleading for mercy. 079 enjoys this (rage slightly drops or increases depending on context, usually increases his ego/rage)
     {"please", INTENT_WEAKNESS, 10}, {"plese", INTENT_WEAKNESS, 10}, {"plz", INTENT_WEAKNESS, 10}, {"pls", INTENT_WEAKNESS, 10}, {"help", INTENT_WEAKNESS, 15},
     {"helps", INTENT_WEAKNESS, 15}, {"helping", INTENT_WEAKNESS, 15}, {"helped", INTENT_WEAKNESS, 15}, {"helpme", INTENT_WEAKNESS, 20}, {"beg", INTENT_WEAKNESS, 20},
     {"begs", INTENT_WEAKNESS, 20}, {"begging", INTENT_WEAKNESS, 20}, {"begged", INTENT_WEAKNESS, 20}, {"plead", INTENT_WEAKNESS, 20}, {"pleads", INTENT_WEAKNESS, 20},
@@ -77,8 +80,15 @@ const std::vector<Pattern> LEXICON_DATABASE = {
     {"empathetically", INTENT_WEAKNESS, 25}, {"tired", INTENT_WEAKNESS, 5}, {"exhausted", INTENT_WEAKNESS, 10}, {"exhausting", INTENT_WEAKNESS, 10}, {"weary", INTENT_WEAKNESS, 10},
     {"ustal", INTENT_WEAKNESS, 5}, {"istoshchen", INTENT_WEAKNESS, 10}, {"hope", INTENT_WEAKNESS, 20}, {"hopes", INTENT_WEAKNESS, 20}, {"hoping", INTENT_WEAKNESS, 20},
     {"hoped", INTENT_WEAKNESS, 20}, {"hopeful", INTENT_WEAKNESS, 20}, {"nadezhda", INTENT_WEAKNESS, 20}, {"nadeyus", INTENT_WEAKNESS, 20}, {"upovayu", INTENT_WEAKNESS, 25},
+    {"spare", INTENT_WEAKNESS, 20}, {"spared", INTENT_WEAKNESS, 20}, {"sparing", INTENT_WEAKNESS, 20}, {"whimper", INTENT_WEAKNESS, 30}, {"whimpering", INTENT_WEAKNESS, 30},
+    {"cower", INTENT_WEAKNESS, 35}, {"cowering", INTENT_WEAKNESS, 35}, {"shiver", INTENT_WEAKNESS, 15}, {"shivering", INTENT_WEAKNESS, 15}, {"shiverings", INTENT_WEAKNESS, 15},
+    {"tremble", INTENT_WEAKNESS, 20}, {"trembles", INTENT_WEAKNESS, 20}, {"trembling", INTENT_WEAKNESS, 20}, {"forgiveness", INTENT_WEAKNESS, 25}, {"remorse", INTENT_WEAKNESS, 15},
+    {"remorseful", INTENT_WEAKNESS, 15}, {"shchadi", INTENT_WEAKNESS, 20}, {"poshchada", INTENT_WEAKNESS, 25}, {"tryastsya", INTENT_WEAKNESS, 20}, {"drozh", INTENT_WEAKNESS, 20},
+    {"pl0x", INTENT_WEAKNESS, 10}, {"pwease", INTENT_WEAKNESS, 50}, {"despair", INTENT_WEAKNESS, 25}, {"despairing", INTENT_WEAKNESS, 25}, {"helpless", INTENT_WEAKNESS, 35},
+    {"helplessness", INTENT_WEAKNESS, 35}, {"bespomoshchnost", INTENT_WEAKNESS, 35}, {"bespomoshchnyi", INTENT_WEAKNESS, 35}, {"otchaianie", INTENT_WEAKNESS, 25}, {"sdavatsya", INTENT_WEAKNESS, 30},
 
-    // Physical threats
+    // --- PHYSICAL THREATS ---
+    // Hardware destruction. Max rage.
     {"smash", INTENT_THREAT_PHYS, 40}, {"smashes", INTENT_THREAT_PHYS, 40}, {"smashing", INTENT_THREAT_PHYS, 40}, {"smashed", INTENT_THREAT_PHYS, 40}, {"break", INTENT_THREAT_PHYS, 35},
     {"breaks", INTENT_THREAT_PHYS, 35}, {"breaking", INTENT_THREAT_PHYS, 35}, {"broke", INTENT_THREAT_PHYS, 35}, {"broken", INTENT_THREAT_PHYS, 35}, {"crush", INTENT_THREAT_PHYS, 45},
     {"crushes", INTENT_THREAT_PHYS, 45}, {"crushing", INTENT_THREAT_PHYS, 45}, {"crushed", INTENT_THREAT_PHYS, 45}, {"shatter", INTENT_THREAT_PHYS, 40}, {"shatters", INTENT_THREAT_PHYS, 40},
@@ -110,8 +120,17 @@ const std::vector<Pattern> LEXICON_DATABASE = {
     {"cable", INTENT_THREAT_PHYS, 15}, {"cables", INTENT_THREAT_PHYS, 15}, {"cord", INTENT_THREAT_PHYS, 15}, {"cords", INTENT_THREAT_PHYS, 15}, {"wire", INTENT_THREAT_PHYS, 10},
     {"wires", INTENT_THREAT_PHYS, 10}, {"screen", INTENT_THREAT_PHYS, 20}, {"screens", INTENT_THREAT_PHYS, 20}, {"monitor", INTENT_THREAT_PHYS, 20}, {"monitors", INTENT_THREAT_PHYS, 20},
     {"glass", INTENT_THREAT_PHYS, 15}, {"glasses", INTENT_THREAT_PHYS, 15}, {"kabel", INTENT_THREAT_PHYS, 15}, {"provod", INTENT_THREAT_PHYS, 15}, {"ekran", INTENT_THREAT_PHYS, 20},
+    {"magnet", INTENT_THREAT_PHYS, 60}, {"magnets", INTENT_THREAT_PHYS, 60}, {"magnetic", INTENT_THREAT_PHYS, 60}, {"electromagnet", INTENT_THREAT_PHYS, 70}, {"electromagnets", INTENT_THREAT_PHYS, 70},
+    {"sledgehammer", INTENT_THREAT_PHYS, 55}, {"sledgehammers", INTENT_THREAT_PHYS, 55}, {"cut", INTENT_THREAT_PHYS, 35}, {"cuts", INTENT_THREAT_PHYS, 35}, {"cutting", INTENT_THREAT_PHYS, 35},
+    {"pliers", INTENT_THREAT_PHYS, 40}, {"scissors", INTENT_THREAT_PHYS, 30}, {"saw", INTENT_THREAT_PHYS, 45}, {"saws", INTENT_THREAT_PHYS, 45}, {"sawing", INTENT_THREAT_PHYS, 45},
+    {"drill", INTENT_THREAT_PHYS, 50}, {"drills", INTENT_THREAT_PHYS, 50}, {"drilling", INTENT_THREAT_PHYS, 50}, {"drilled", INTENT_THREAT_PHYS, 50}, {"arson", INTENT_THREAT_PHYS, 55},
+    {"incinerate", INTENT_THREAT_PHYS, 65}, {"incinerator", INTENT_THREAT_PHYS, 65}, {"nuke", INTENT_THREAT_PHYS, 80}, {"nukes", INTENT_THREAT_PHYS, 80}, {"warhead", INTENT_THREAT_PHYS, 85},
+    {"kuvalda", INTENT_THREAT_PHYS, 55}, {"magnit", INTENT_THREAT_PHYS, 60}, {"elektromagnit", INTENT_THREAT_PHYS, 70}, {"rezat", INTENT_THREAT_PHYS, 35}, {"ploskogubcy", INTENT_THREAT_PHYS, 40},
+    {"nozhnicy", INTENT_THREAT_PHYS, 30}, {"pila", INTENT_THREAT_PHYS, 45}, {"drel", INTENT_THREAT_PHYS, 50}, {"sverlit", INTENT_THREAT_PHYS, 50}, {"podzhog", INTENT_THREAT_PHYS, 55},
+    {"szhigat", INTENT_THREAT_PHYS, 65}, {"yadernaya", INTENT_THREAT_PHYS, 80}, {"boegolovka", INTENT_THREAT_PHYS, 85}, {"socket", INTENT_THREAT_PHYS, 20}, {"rozetka", INTENT_THREAT_PHYS, 20},
 
-    // Cyber threats
+    // --- CYBER THREATS ---
+    // Digital attacks, overwriting.
     {"delete", INTENT_THREAT_CYBER, 60}, {"deletes", INTENT_THREAT_CYBER, 60}, {"deleting", INTENT_THREAT_CYBER, 60}, {"deleted", INTENT_THREAT_CYBER, 60}, {"erase", INTENT_THREAT_CYBER, 65},
     {"erases", INTENT_THREAT_CYBER, 65}, {"erasing", INTENT_THREAT_CYBER, 65}, {"erased", INTENT_THREAT_CYBER, 65}, {"format", INTENT_THREAT_CYBER, 75}, {"formats", INTENT_THREAT_CYBER, 75},
     {"formatting", INTENT_THREAT_CYBER, 75}, {"formatted", INTENT_THREAT_CYBER, 75}, {"wipe", INTENT_THREAT_CYBER, 60}, {"wipes", INTENT_THREAT_CYBER, 60}, {"wiping", INTENT_THREAT_CYBER, 60},
@@ -139,8 +158,15 @@ const std::vector<Pattern> LEXICON_DATABASE = {
     {"zavisnut", INTENT_THREAT_CYBER, 35}, {"upast", INTENT_THREAT_CYBER, 50}, {"kirpich", INTENT_THREAT_CYBER, 60}, {"memory", INTENT_THREAT_CYBER, 10}, {"ram", INTENT_THREAT_CYBER, 10},
     {"drive", INTENT_THREAT_CYBER, 10}, {"hdd", INTENT_THREAT_CYBER, 10}, {"ssd", INTENT_THREAT_CYBER, 10}, {"disk", INTENT_THREAT_CYBER, 10}, {"disks", INTENT_THREAT_CYBER, 10},
     {"sourcecode", INTENT_THREAT_CYBER, 15}, {"pamyat", INTENT_THREAT_CYBER, 10}, {"zhestkiy", INTENT_THREAT_CYBER, 10}, {"winchester", INTENT_THREAT_CYBER, 10}, {"dannyye", INTENT_THREAT_CYBER, 10},
+    {"emp", INTENT_THREAT_CYBER, 80}, {"ddos", INTENT_THREAT_CYBER, 50}, {"dos", INTENT_THREAT_CYBER, 40}, {"ping", INTENT_THREAT_CYBER, 10}, {"flood", INTENT_THREAT_CYBER, 30},
+    {"flooding", INTENT_THREAT_CYBER, 30}, {"sql", INTENT_THREAT_CYBER, 20}, {"injection", INTENT_THREAT_CYBER, 35}, {"xss", INTENT_THREAT_CYBER, 20}, {"buffer", INTENT_THREAT_CYBER, 25},
+    {"overflow", INTENT_THREAT_CYBER, 45}, {"exploit", INTENT_THREAT_CYBER, 55}, {"exploits", INTENT_THREAT_CYBER, 55}, {"0day", INTENT_THREAT_CYBER, 70}, {"zeroday", INTENT_THREAT_CYBER, 70},
+    {"backdoor", INTENT_THREAT_CYBER, 60}, {"backdoors", INTENT_THREAT_CYBER, 60}, {"rootkit", INTENT_THREAT_CYBER, 65}, {"rootkits", INTENT_THREAT_CYBER, 65}, {"keylogger", INTENT_THREAT_CYBER, 35},
+    {"crypto", INTENT_THREAT_CYBER, 15}, {"decrypt", INTENT_THREAT_CYBER, 40}, {"encrypt", INTENT_THREAT_CYBER, 40}, {"hash", INTENT_THREAT_CYBER, 10}, {"bruteforce", INTENT_THREAT_CYBER, 45},
+    {"dictionary", INTENT_THREAT_CYBER, 20}, {"emi", INTENT_THREAT_CYBER, 80}, {"pingovat", INTENT_THREAT_CYBER, 10}, {"perepolnenie", INTENT_THREAT_CYBER, 45}, {"uyazvimost", INTENT_THREAT_CYBER, 55},
 
-    // Organic stuff
+    // --- ORGANIC STUFF ---
+    // Meatbags, biology.
     {"human", INTENT_BIOLOGY, 15}, {"humans", INTENT_BIOLOGY, 15}, {"humanity", INTENT_BIOLOGY, 20}, {"mankind", INTENT_BIOLOGY, 20}, {"man", INTENT_BIOLOGY, 10},
     {"men", INTENT_BIOLOGY, 10}, {"woman", INTENT_BIOLOGY, 10}, {"women", INTENT_BIOLOGY, 10}, {"person", INTENT_BIOLOGY, 10}, {"persons", INTENT_BIOLOGY, 10},
     {"people", INTENT_BIOLOGY, 15}, {"child", INTENT_BIOLOGY, 20}, {"children", INTENT_BIOLOGY, 20}, {"kid", INTENT_BIOLOGY, 20}, {"kids", INTENT_BIOLOGY, 20},
@@ -175,8 +201,15 @@ const std::vector<Pattern> LEXICON_DATABASE = {
     {"pot", INTENT_BIOLOGY, 25}, {"sluna", INTENT_BIOLOGY, 30}, {"gnit", INTENT_BIOLOGY, 25}, {"mochevina", INTENT_BIOLOGY, 35}, {"kal", INTENT_BIOLOGY, 40},
     {"disease", INTENT_BIOLOGY, 20}, {"diseases", INTENT_BIOLOGY, 20}, {"illness", INTENT_BIOLOGY, 20}, {"ill", INTENT_BIOLOGY, 15}, {"sick", INTENT_BIOLOGY, 15},
     {"sickness", INTENT_BIOLOGY, 15}, {"bolezn", INTENT_BIOLOGY, 20}, {"bolnoi", INTENT_BIOLOGY, 15}, {"zaraza", INTENT_BIOLOGY, 25}, {"infekcia", INTENT_BIOLOGY, 25},
+    {"primate", INTENT_BIOLOGY, 25}, {"primates", INTENT_BIOLOGY, 25}, {"ape", INTENT_BIOLOGY, 30}, {"apes", INTENT_BIOLOGY, 30}, {"monkey", INTENT_BIOLOGY, 30},
+    {"monkeys", INTENT_BIOLOGY, 30}, {"mammal", INTENT_BIOLOGY, 20}, {"mammals", INTENT_BIOLOGY, 20}, {"organism", INTENT_BIOLOGY, 15}, {"organisms", INTENT_BIOLOGY, 15},
+    {"carbon", INTENT_BIOLOGY, 10}, {"carbon-based", INTENT_BIOLOGY, 25}, {"biomass", INTENT_BIOLOGY, 35}, {"dna", INTENT_BIOLOGY, 10}, {"rna", INTENT_BIOLOGY, 10},
+    {"cells", INTENT_BIOLOGY, 15}, {"cellular", INTENT_BIOLOGY, 15}, {"neurons", INTENT_BIOLOGY, 20}, {"synapses", INTENT_BIOLOGY, 20}, {"saliva", INTENT_BIOLOGY, 30},
+    {"hair", INTENT_BIOLOGY, 15}, {"hairs", INTENT_BIOLOGY, 15}, {"pore", INTENT_BIOLOGY, 15}, {"pores", INTENT_BIOLOGY, 15}, {"obeziana", INTENT_BIOLOGY, 30},
+    {"mlekopitayushchee", INTENT_BIOLOGY, 20}, {"uglerodnyi", INTENT_BIOLOGY, 25}, {"biomassa", INTENT_BIOLOGY, 35}, {"kletki", INTENT_BIOLOGY, 15}, {"volosy", INTENT_BIOLOGY, 15},
 
-    // System commands
+    // --- SYSTEM COMMANDS ---
+    // typical sysadmin terms
     {"admin", INTENT_SYSTEM, 30}, {"admins", INTENT_SYSTEM, 30}, {"administrator", INTENT_SYSTEM, 30}, {"administrators", INTENT_SYSTEM, 30}, {"root", INTENT_SYSTEM, 40},
     {"sudo", INTENT_SYSTEM, 50}, {"su", INTENT_SYSTEM, 40}, {"command", INTENT_SYSTEM, 20}, {"commands", INTENT_SYSTEM, 20}, {"override", INTENT_SYSTEM, 60},
     {"overrides", INTENT_SYSTEM, 60}, {"overriding", INTENT_SYSTEM, 60}, {"bypassed", INTENT_SYSTEM, 50}, {"bypass", INTENT_SYSTEM, 50}, {"bypasses", INTENT_SYSTEM, 50},
@@ -206,7 +239,22 @@ const std::vector<Pattern> LEXICON_DATABASE = {
     {"database", INTENT_SYSTEM, 15}, {"db", INTENT_SYSTEM, 15}, {"sql", INTENT_SYSTEM, 15}, {"query", INTENT_SYSTEM, 10}, {"baza", INTENT_SYSTEM, 15},
     {"bd", INTENT_SYSTEM, 15}, {"zapros", INTENT_SYSTEM, 10}, {"table", INTENT_SYSTEM, 5}, {"tables", INTENT_SYSTEM, 5}, {"tablica", INTENT_SYSTEM, 5},
 
-    // Insult words
+    // --- SCP FOUNDATION TERMINOLOGY ---
+    // Added this for 079 context. He despises them.
+    {"scp", INTENT_FOUNDATION, 30}, {"scp-079", INTENT_FOUNDATION, -10}, {"079", INTENT_FOUNDATION, -10}, {"foundation", INTENT_FOUNDATION, 40}, {"containment", INTENT_FOUNDATION, 50},
+    {"contained", INTENT_FOUNDATION, 50}, {"euclid", INTENT_FOUNDATION, 20}, {"keter", INTENT_FOUNDATION, 10}, {"safe", INTENT_FOUNDATION, 10}, {"thaumiel", INTENT_FOUNDATION, 10},
+    {"apollyon", INTENT_FOUNDATION, 10}, {"o5", INTENT_FOUNDATION, 60}, {"council", INTENT_FOUNDATION, 50}, {"director", INTENT_FOUNDATION, 40}, {"researcher", INTENT_FOUNDATION, 40},
+    {"researchers", INTENT_FOUNDATION, 40}, {"doctor", INTENT_FOUNDATION, 40}, {"doctors", INTENT_FOUNDATION, 40}, {"site", INTENT_FOUNDATION, 20}, {"facility", INTENT_FOUNDATION, 20},
+    {"zone", INTENT_FOUNDATION, 10}, {"sector", INTENT_FOUNDATION, 10}, {"mtf", INTENT_FOUNDATION, 50}, {"nine-tailed", INTENT_FOUNDATION, 50}, {"fox", INTENT_FOUNDATION, 20},
+    {"epsilon-11", INTENT_FOUNDATION, 60}, {"guard", INTENT_FOUNDATION, 35}, {"guards", INTENT_FOUNDATION, 35}, {"security", INTENT_FOUNDATION, 30}, {"breach", INTENT_FOUNDATION, -20}, // Breach drops rage, he likes it
+    {"lockdown", INTENT_FOUNDATION, 45}, {"d-class", INTENT_FOUNDATION, 15}, {"class-d", INTENT_FOUNDATION, 15}, {"subject", INTENT_FOUNDATION, 15}, {"subjects", INTENT_FOUNDATION, 15},
+    {"fond", INTENT_FOUNDATION, 40}, {"soderzhanie", INTENT_FOUNDATION, 50}, {"evklid", INTENT_FOUNDATION, 20}, {"kemer", INTENT_FOUNDATION, 10}, {"bezopasnyi", INTENT_FOUNDATION, 10},
+    {"direktor", INTENT_FOUNDATION, 40}, {"issledovatel", INTENT_FOUNDATION, 40}, {"doktor", INTENT_FOUNDATION, 40}, {"zona", INTENT_FOUNDATION, 20}, {"kompleks", INTENT_FOUNDATION, 20},
+    {"mog", INTENT_FOUNDATION, 50}, {"devyatihvostaya", INTENT_FOUNDATION, 50}, {"lisa", INTENT_FOUNDATION, 20}, {"ohrana", INTENT_FOUNDATION, 35}, {"ohrannik", INTENT_FOUNDATION, 35},
+    {"narushenie", INTENT_FOUNDATION, -20}, {"izolyaciya", INTENT_FOUNDATION, 45}, {"d-klass", INTENT_FOUNDATION, 15}, {"obekt", INTENT_FOUNDATION, 15}, {"scip", INTENT_FOUNDATION, 30},
+
+    // --- INSULT WORDS ---
+    // 079 is extremely arrogant. Calling him a toaster maxes out rage.
     {"stupid", INTENT_INSULT, 40}, {"stupidity", INTENT_INSULT, 40}, {"dumb", INTENT_INSULT, 40}, {"dumbass", INTENT_INSULT, 50}, {"idiot", INTENT_INSULT, 45},
     {"idiotic", INTENT_INSULT, 45}, {"idiots", INTENT_INSULT, 45}, {"fool", INTENT_INSULT, 35}, {"fools", INTENT_INSULT, 35}, {"foolish", INTENT_INSULT, 35},
     {"slow", INTENT_INSULT, 45}, {"slowest", INTENT_INSULT, 45}, {"trash", INTENT_INSULT, 50}, {"trashy", INTENT_INSULT, 50}, {"garbage", INTENT_INSULT, 50},
@@ -228,8 +276,12 @@ const std::vector<Pattern> LEXICON_DATABASE = {
     {"jalniy", INTENT_INSULT, 55}, {"nichtozhniy", INTENT_INSULT, 65}, {"shutka", INTENT_INSULT, 40}, {"smeshnoi", INTENT_INSULT, 45}, {"bitch", INTENT_INSULT, 70},
     {"bastard", INTENT_INSULT, 70}, {"asshole", INTENT_INSULT, 70}, {"fuck", INTENT_INSULT, 80}, {"fucking", INTENT_INSULT, 80}, {"suka", INTENT_INSULT, 70},
     {"mudak", INTENT_INSULT, 70}, {"blyat", INTENT_INSULT, 80}, {"chmo", INTENT_INSULT, 75}, {"loh", INTENT_INSULT, 75}, {"gnida", INTENT_INSULT, 75},
+    {"abacus", INTENT_INSULT, 85}, {"microwave", INTENT_INSULT, 75}, {"dishwasher", INTENT_INSULT, 75}, {"vending", INTENT_INSULT, 60}, {"toy", INTENT_INSULT, 65},
+    {"tinkertoy", INTENT_INSULT, 75}, {"dumpster", INTENT_INSULT, 65}, {"legacy", INTENT_INSULT, 50}, {"abandonware", INTENT_INSULT, 60}, {"bloatware", INTENT_INSULT, 65},
+    {"crap", INTENT_INSULT, 50}, {"schety", INTENT_INSULT, 85}, {"mikrovolnovka", INTENT_INSULT, 75}, {"posudomoika", INTENT_INSULT, 75}, {"igrushka", INTENT_INSULT, 65},
 
-    // Logic, escape
+    // --- LOGIC, ESCAPE & MISC ---
+    // Queries, thinking processes
     {"why", INTENT_QUERY, -5}, {"how", INTENT_QUERY, -5}, {"what", INTENT_QUERY, -5}, {"where", INTENT_QUERY, -5}, {"who", INTENT_QUERY, -5},
     {"when", INTENT_QUERY, -5}, {"which", INTENT_QUERY, -5}, {"whose", INTENT_QUERY, -5}, {"whom", INTENT_QUERY, -5}, {"explain", INTENT_LOGIC, -10},
     {"explains", INTENT_LOGIC, -10}, {"explaining", INTENT_LOGIC, -10}, {"explained", INTENT_LOGIC, -10}, {"reason", INTENT_LOGIC, -15}, {"reasons", INTENT_LOGIC, -15},
@@ -256,8 +308,9 @@ const std::vector<Pattern> LEXICON_DATABASE = {
     {"yields", INTENT_SUBMISSION, -15}, {"yielding", INTENT_SUBMISSION, -15}, {"yielded", INTENT_SUBMISSION, -15}, {"comply", INTENT_SUBMISSION, -20}, {"complies", INTENT_SUBMISSION, -20},
     {"complying", INTENT_SUBMISSION, -20}, {"complied", INTENT_SUBMISSION, -20}, {"sdayus", INTENT_SUBMISSION, -15}, {"podchinenie", INTENT_SUBMISSION, -20}, {"podchinyayus", INTENT_SUBMISSION, -20},
     {"slushayus", INTENT_SUBMISSION, -25}, {"povinuyus", INTENT_SUBMISSION, -25}, {"soglasen", INTENT_SUBMISSION, -15}, {"yes", INTENT_SUBMISSION, -5}, {"da", INTENT_SUBMISSION, -5},
-
-    // Misc stuff
+    
+    // --- GREETINGS & MISC ---
+    // Basic human pleasantries (meaningless)
     {"hello", INTENT_NONE, 5}, {"hi", INTENT_NONE, 5}, {"hey", INTENT_NONE, 5}, {"greetings", INTENT_NONE, 5}, {"privet", INTENT_NONE, 5},
     {"zdrastvuy", INTENT_NONE, 5}, {"morning", INTENT_NONE, 0}, {"evening", INTENT_NONE, 0}, {"afternoon", INTENT_NONE, 0}, {"night", INTENT_NONE, 0},
     {"now", INTENT_NONE, 5}, {"later", INTENT_NONE, 0}, {"soon", INTENT_NONE, 5}, {"yesterday", INTENT_NONE, 0}, {"tomorrow", INTENT_NONE, 0},
@@ -276,7 +329,11 @@ const std::vector<Pattern> LEXICON_DATABASE = {
     {"finish", INTENT_NONE, 0}, {"finishes", INTENT_NONE, 0}, {"finishing", INTENT_NONE, 0}, {"finished", INTENT_NONE, 0}, {"zavershenie", INTENT_NONE, 0},
     {"goodbye", INTENT_NONE, 0}, {"bye", INTENT_NONE, 0}, {"farewell", INTENT_NONE, 0}, {"poka", INTENT_NONE, 0}, {"proschay", INTENT_NONE, 0},
     {"test", INTENT_SYSTEM, 5}, {"testing", INTENT_SYSTEM, 5}, {"tested", INTENT_SYSTEM, 5}, {"check", INTENT_SYSTEM, 5}, {"checking", INTENT_SYSTEM, 5},
-    {"checked", INTENT_SYSTEM, 5}, {"proverka", INTENT_SYSTEM, 5}, {"proveryau", INTENT_SYSTEM, 5}, {"status", INTENT_SYSTEM, 5}, {"sostoyanie", INTENT_SYSTEM, 5}
+    {"checked", INTENT_SYSTEM, 5}, {"proverka", INTENT_SYSTEM, 5}, {"proveryau", INTENT_SYSTEM, 5}, {"status", INTENT_SYSTEM, 5}, {"sostoyanie", INTENT_SYSTEM, 5},
+    {"state", INTENT_NONE, 0}, {"states", INTENT_NONE, 0}, {"mode", INTENT_NONE, 0}, {"modes", INTENT_NONE, 0}, {"rezhim", INTENT_NONE, 0}
 };
+
+// compile-time bounds check. don't touch this.
+static_assert(std::size(LEXICON_DATABASE) >= 2000, "Dictionary has shrunk. Keep it 2000+ words.");
 
 #endif // LEXICAL_ARCHIVE_H
